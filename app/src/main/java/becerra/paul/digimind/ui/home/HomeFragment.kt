@@ -1,5 +1,7 @@
 package becerra.paul.digimind.ui.home
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +13,8 @@ import androidx.lifecycle.ViewModelProvider
 import becerra.paul.digimind.databinding.FragmentHomeBinding
 import becerra.paul.digimind.ui.Task
 import becerra.paul.digimind.ui.TaskAdapter
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 
 class HomeFragment : Fragment() {
 
@@ -52,11 +56,18 @@ class HomeFragment : Fragment() {
         return root
     }
 
-    fun fillTasks(){
-        tasks.add(Task("tarea 1", "lunes", "15:00"))
-        tasks.add(Task("tarea 2", "lunes", "15:00"))
-        tasks.add(Task("tarea 3", "lunes", "15:00"))
-        tasks.add(Task("tarea 4", "lunes", "15:00"))
+    private fun fillTasks(){
+        val sharedPreferences = context?.getSharedPreferences("preferencias", Context.MODE_PRIVATE)
+        val gson = Gson()
+
+        var json = sharedPreferences?.getString("tasks", null)
+
+        val type = object : TypeToken<ArrayList<Task?>?>(){}.type
+
+        if (json != null){
+            tasks = gson.fromJson(json, type)
+        }
+
     }
 
     override fun onDestroyView() {

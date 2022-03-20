@@ -11,6 +11,7 @@ import android.widget.TextView
 import android.widget.Toast
 import becerra.paul.digimind.R
 import becerra.paul.digimind.ui.home.HomeFragment
+import com.google.gson.Gson
 
 class TaskAdapter: BaseAdapter {
     lateinit var context: Context
@@ -61,7 +62,9 @@ class TaskAdapter: BaseAdapter {
                 setPositiveButton(R.string.ok_button,
                     DialogInterface.OnClickListener { dialog, id ->
                         HomeFragment.tasks.remove(task)
+                        saveJson()
                         HomeFragment.adapter.notifyDataSetChanged()
+
                         Toast.makeText(context, R.string.msg_deleted, Toast.LENGTH_SHORT).show()
                     }
                 )
@@ -72,5 +75,17 @@ class TaskAdapter: BaseAdapter {
             builder.create()
         }
         alertDialog?.show()
+    }
+
+    fun saveJson(){
+        val sharedPreferences = context?.getSharedPreferences("preferencias", Context.MODE_PRIVATE)
+        val editor = sharedPreferences?.edit()
+
+        val gson: Gson = Gson()
+
+        var json = gson.toJson(HomeFragment.tasks)
+
+        editor?.putString("tasks", json)
+        editor?.apply()
     }
 }

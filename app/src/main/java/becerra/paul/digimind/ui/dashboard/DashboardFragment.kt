@@ -1,6 +1,7 @@
 package becerra.paul.digimind.ui.dashboard
 
 import android.app.TimePickerDialog
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,6 +14,7 @@ import becerra.paul.digimind.R
 import becerra.paul.digimind.databinding.FragmentDashboardBinding
 import becerra.paul.digimind.ui.Task
 import becerra.paul.digimind.ui.home.HomeFragment
+import com.google.gson.Gson
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -69,6 +71,20 @@ class DashboardFragment : Fragment() {
 
         HomeFragment.tasks.add(task)
         Toast.makeText(context, "Se ha agregado la tarea", Toast.LENGTH_SHORT).show()
+
+        saveJson()
+    }
+
+    fun saveJson(){
+        val sharedPreferences = context?.getSharedPreferences("preferencias", Context.MODE_PRIVATE)
+        val editor = sharedPreferences?.edit()
+
+        val gson: Gson = Gson()
+
+        var json = gson.toJson(HomeFragment.tasks)
+
+        editor?.putString("tasks", json)
+        editor?.apply()
     }
 
     fun setTime(){
