@@ -1,10 +1,8 @@
-package becerra.paul.digimind.ui.dashboard
+package becerra.paul.digimind.ui.newtask
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
-class DashboardViewModel : ViewModel() {
+class NewTaskViewModel : ViewModel() {
 //
 //    private val _text = MutableLiveData<String>().apply {
 //        value = "This is dashboard Fragment"
