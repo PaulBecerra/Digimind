@@ -1,13 +1,20 @@
 package becerra.paul.digimind.ui.dashboard
 
+import android.app.TimePickerDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import becerra.paul.digimind.R
 import becerra.paul.digimind.databinding.FragmentDashboardBinding
+import becerra.paul.digimind.ui.Task
+import becerra.paul.digimind.ui.home.HomeFragment
+import java.text.SimpleDateFormat
+import java.util.*
 
 class DashboardFragment : Fragment() {
 
@@ -28,11 +35,53 @@ class DashboardFragment : Fragment() {
         _binding = FragmentDashboardBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        /*val textView: TextView = binding.textDashboard
-        dashboardViewModel.text.observe(viewLifecycleOwner) {
-            textView.text = it
-        }*/
+        binding.btnTime.setOnClickListener{
+            setTime()
+        }
+
+        binding.btnSave.setOnClickListener{
+            saveTask()
+        }
         return root
+    }
+
+    fun saveTask(){
+        var title: String = binding.etTask.text.toString()
+        var time: String = binding.btnTime.text.toString()
+        var day: String = ""
+
+        if (binding.rbDay1.isChecked)
+            day = getString(R.string.day1)
+        if (binding.rbDay2.isChecked)
+            day = getString(R.string.day2)
+        if (binding.rbDay3.isChecked)
+            day = getString(R.string.day3)
+        if (binding.rbDay4.isChecked)
+            day = getString(R.string.day4)
+        if (binding.rbDay5.isChecked)
+            day = getString(R.string.day5)
+        if (binding.rbDay6.isChecked)
+            day = getString(R.string.day6)
+        if (binding.rbDay1.isChecked)
+            day = getString(R.string.day7)
+
+        var task = Task(title, day, time)
+
+        HomeFragment.tasks.add(task)
+        Toast.makeText(context, "Se ha agregado la tarea", Toast.LENGTH_SHORT).show()
+    }
+
+    fun setTime(){
+        val calendar = Calendar.getInstance()
+        val timeSetListener = TimePickerDialog.OnTimeSetListener{ timePicker, hour, minute ->
+            calendar.set(Calendar.HOUR_OF_DAY, hour)
+            calendar.set(Calendar.MINUTE, minute)
+
+            binding.btnTime.text = SimpleDateFormat("HH:mm").format(calendar.time)
+        }
+
+        TimePickerDialog(context, timeSetListener, calendar.get(Calendar.HOUR_OF_DAY),
+            calendar.get(Calendar.MINUTE), true).show()
     }
 
     override fun onDestroyView() {

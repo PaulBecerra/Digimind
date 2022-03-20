@@ -15,8 +15,12 @@ import becerra.paul.digimind.ui.TaskAdapter
 class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
-    var tasks: ArrayList<Task> = ArrayList<Task>()
 
+
+    companion object{
+        var tasks: ArrayList<Task> = ArrayList<Task>()
+        var first = true
+    }
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
@@ -34,7 +38,11 @@ class HomeFragment : Fragment() {
 
         val gridView: GridView = binding.gridview
 
-        fillTasks()
+        if (first) {
+            fillTasks()
+            first = false
+        }
+
 
         val adapter = TaskAdapter(root.context, tasks)
 
