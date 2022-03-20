@@ -19,7 +19,7 @@ class TaskAdapter: BaseAdapter {
 
     constructor(context: Context, tasks: ArrayList<Task>) {
         this.context = context
-        this.tasks = tasks;
+        this.tasks = tasks
     }
 
     override fun getCount(): Int {
@@ -78,7 +78,7 @@ class TaskAdapter: BaseAdapter {
     }
 
     fun saveJson(){
-        val sharedPreferences = context?.getSharedPreferences("preferencias", Context.MODE_PRIVATE)
+        val sharedPreferences = context?.getSharedPreferences("preferences", Context.MODE_PRIVATE)
         val editor = sharedPreferences?.edit()
 
         val gson: Gson = Gson()

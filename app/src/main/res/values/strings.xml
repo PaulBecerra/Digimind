@@ -18,8 +18,12 @@
     <string name="hint_title">Práctica Digimind</string>
     <string name="new_task">Nueva tarea agregada</string>
     <string name="ok_button">Eliminar</string>
+    <string name="error_button">Aceptar</string>
     <string name="cancel_button">Cancelar</string>
     <string name="title">AVISO</string>
     <string name="msg">¿Deseas eliminar esta tarea?</string>
+    <string name="msg_error_title">Necesitas ingresar el titulo de la tarea</string>
+    <string name="msg_error_day">Necesitas ingresar el dia de la tarea</string>
+    <string name="msg_error_hour">Necesitas ingresar la hora de la tarea</string>
     <string name="msg_deleted">Se ha eliminado la tarea</string>
 </resources>

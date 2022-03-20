@@ -1,5 +1,6 @@
 package becerra.paul.digimind.ui.newtask
 
+import android.app.AlertDialog
 import android.app.TimePickerDialog
 import android.content.Context
 import android.os.Bundle
@@ -8,7 +9,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import becerra.paul.digimind.R
 import becerra.paul.digimind.databinding.FragmentNewtaskBinding
 import becerra.paul.digimind.ui.Task
@@ -30,8 +30,6 @@ class NewTaskFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val dashboardViewModel =
-            ViewModelProvider(this).get(NewTaskViewModel::class.java)
 
         _binding = FragmentNewtaskBinding.inflate(inflater, container, false)
         val root: View = binding.root
@@ -46,10 +44,15 @@ class NewTaskFragment : Fragment() {
         return root
     }
 
-    fun saveTask(){
-        var title: String = binding.etTask.text.toString()
-        var time: String = binding.btnTime.text.toString()
-        var day: String = ""
+    private fun saveTask(){
+        val title: String = binding.etTask.text.toString()
+
+        if (title.isEmpty()){
+            sendMessageError(R.string.msg_error_title)
+            return
+        }
+
+        var day = ""
 
         if (binding.rbDay1.isChecked)
             day = getString(R.string.day1)
@@ -63,10 +66,22 @@ class NewTaskFragment : Fragment() {
             day = getString(R.string.day5)
         if (binding.rbDay6.isChecked)
             day = getString(R.string.day6)
-        if (binding.rbDay1.isChecked)
+        if (binding.rbDay7.isChecked)
             day = getString(R.string.day7)
 
-        var task = Task(title, day, time)
+        if (day == ""){
+            sendMessageError(R.string.msg_error_day)
+            return
+        }
+
+        val time: String = binding.btnTime.text.toString()
+
+        if (time == "HORA"){
+            sendMessageError(R.string.msg_error_hour)
+            return
+        }
+
+        val task = Task(title, day, time)
 
         HomeFragment.tasks.add(task)
         Toast.makeText(context, "Se ha agregado la tarea", Toast.LENGTH_SHORT).show()
@@ -74,19 +89,32 @@ class NewTaskFragment : Fragment() {
         saveJson()
     }
 
-    fun saveJson(){
-        val sharedPreferences = context?.getSharedPreferences("preferencias", Context.MODE_PRIVATE)
+    private fun sendMessageError(msjError: Int){
+        val alertDialog: AlertDialog? = context?.let {
+            val builder = AlertDialog.Builder(it)
+            builder.apply {
+            }
+
+            builder.setMessage(msjError).setTitle(R.string.title)
+
+            builder.create()
+        }
+        alertDialog?.show()
+    }
+
+    private fun saveJson(){
+        val sharedPreferences = context?.getSharedPreferences("preferences", Context.MODE_PRIVATE)
         val editor = sharedPreferences?.edit()
 
-        val gson: Gson = Gson()
+        val gson = Gson()
 
-        var json = gson.toJson(HomeFragment.tasks)
+        val json = gson.toJson(HomeFragment.tasks)
 
         editor?.putString("tasks", json)
         editor?.apply()
     }
 
-    fun setTime(){
+    private fun setTime(){
         val calendar = Calendar.getInstance()
         val timeSetListener = TimePickerDialog.OnTimeSetListener{ timePicker, hour, minute ->
             calendar.set(Calendar.HOUR_OF_DAY, hour)

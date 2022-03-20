@@ -1,13 +1,11 @@
 package becerra.paul.digimind.ui.home
 
 import android.content.Context
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.GridView
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import becerra.paul.digimind.databinding.FragmentHomeBinding
@@ -57,10 +55,10 @@ class HomeFragment : Fragment() {
     }
 
     private fun fillTasks(){
-        val sharedPreferences = context?.getSharedPreferences("preferencias", Context.MODE_PRIVATE)
+        val sharedPreferences = context?.getSharedPreferences("preferences", Context.MODE_PRIVATE)
         val gson = Gson()
 
-        var json = sharedPreferences?.getString("tasks", null)
+        val json = sharedPreferences?.getString("tasks", null)
 
         val type = object : TypeToken<ArrayList<Task?>?>(){}.type
 
