@@ -20,6 +20,7 @@ class HomeFragment : Fragment() {
     companion object{
         var tasks: ArrayList<Task> = ArrayList<Task>()
         var first = true
+        lateinit var adapter: TaskAdapter
     }
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -44,7 +45,7 @@ class HomeFragment : Fragment() {
         }
 
 
-        val adapter = TaskAdapter(root.context, tasks)
+        adapter = TaskAdapter(root.context, tasks)
 
         gridView.adapter = adapter
 

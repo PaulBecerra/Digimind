@@ -1,18 +1,22 @@
 package becerra.paul.digimind.ui
 
+import android.app.AlertDialog
 import android.content.Context
+import android.content.DialogInterface
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.TextView
+import android.widget.Toast
 import becerra.paul.digimind.R
+import becerra.paul.digimind.ui.home.HomeFragment
 
 class TaskAdapter: BaseAdapter {
     lateinit var context: Context
     var tasks: ArrayList<Task> = ArrayList<Task>()
 
-    constructor(context: Context, tasks: ArrayList<Task>){
+    constructor(context: Context, tasks: ArrayList<Task>) {
         this.context = context
         this.tasks = tasks;
     }
@@ -43,6 +47,30 @@ class TaskAdapter: BaseAdapter {
         textViewTime.setText(task.time)
         textViewDays.setText(task.day)
 
+        view.setOnClickListener{
+            remove(task)
+        }
+
         return view
+    }
+
+    fun remove(task: Task){
+        val alertDialog: AlertDialog? = context?.let {
+            val builder = AlertDialog.Builder(it)
+            builder.apply {
+                setPositiveButton(R.string.ok_button,
+                    DialogInterface.OnClickListener { dialog, id ->
+                        HomeFragment.tasks.remove(task)
+                        HomeFragment.adapter.notifyDataSetChanged()
+                        Toast.makeText(context, R.string.msg_deleted, Toast.LENGTH_SHORT).show()
+                    }
+                )
+            }
+
+            builder?.setMessage(R.string.msg).setTitle(R.string.title)
+
+            builder.create()
+        }
+        alertDialog?.show()
     }
 }
